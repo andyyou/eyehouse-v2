@@ -1,0 +1,218 @@
+extends layout
+
+block content
+  div.row
+    div.col-md-7
+      div(class="text-center")
+        div(class="main")
+          canvas(id="viewport")
+          button(class="btn btn-primary btn-sm", id="btn-save") 
+            i(class="fa fa-floppy-o fa-2x")
+    div.col-md-5
+      div(class='housemap')
+        canvas(id="map", width="500", height="480")
+      
+  div.row
+    div.col-md-12.text-center
+      //- img(src="http://172.16.1.204:5000/video_feed", id="origin")
+    div(class="keys")
+      div(id="btn-l", class="b arrow")
+      div(id="btn-r", class="b arrow")
+      div(id="btn-s", class="b circle")
+      
+block javascripts
+  script.
+    $(function () {
+      var canvas = document.querySelector('#viewport');
+      var context = canvas.getContext('2d');
+      var image = new Image();
+      var timer = setInterval(function () {
+        getscreen();
+      }, 60);
+      
+      function getscreen()
+      {
+        image.setAttribute('crossOrigin', 'anonymous');
+        //- image.src = 'http://172.16.1.204:5000/video_feed';
+        image.src = 'http://i.imgur.com/Nb3tIRf.png';
+        context.drawImage(image, 0, 0);
+      }
+      
+      $('#btn-save').on('click', function () {
+        clearInterval(timer);
+        window.location = '/'
+        
+        //- var dataURL = canvas.toDataURL('image/png');;
+        //- console.log(dataURL);
+      })
+    });
+    
+    /**
+     * house map
+     */
+    var canvasMap = document.getElementById('map');
+    var ctx = canvasMap.getContext('2d');
+    var movementSpeed = 5;
+    var angularvelocity = 5;
+    var requestAnimationFrameID;
+
+    var ball = {
+      x: 100, //ball start position
+      y: 100, //ball start position
+      vx: 0,  //velocity
+      vy: 0,  //velocity
+      radius: 10,
+      color: 'blue',
+      draw: function() {
+        ctx.beginPath();
+        ctx.arc(0, 0, this.radius, 0, Math.PI*2, true);
+        ctx.closePath();
+        ctx.fillStyle = this.color;
+        ctx.fill();
+      }
+    };
+
+    var triangle = {
+      angle:0,
+      angularV:angularvelocity, //angular velocity
+      draw: function(){
+        ctx.rotate((this.angularV*this.angle*Math.PI)/180); 
+        ctx.translate(18,0);
+        ctx.moveTo(0,0);
+        ctx.lineTo(-12,5);
+        ctx.lineTo(-12,-5);
+        ctx.fill();
+        ctx.translate(-18, 0);
+        ctx.rotate(-1*(this.angularV*this.angle*Math.PI)/180); 
+      }
+    };
+
+    function draw(vx, vy, angularV) {
+      ctx.clearRect(-100,-100,200, 200);
+      ball.draw();
+      triangle.draw();
+      if(angularV > 0){
+        triangle.angle++;
+      }
+      else if(angularV < 0){
+        triangle.angle--;
+      }
+      if(triangle.angle == 360){
+        triangle.angle = 0;
+      }
+      if(triangle.angle == -1) {
+       tirangle.angle = 359
+      }
+      ball.vx = vx;
+      ball.vy = vy;
+      ctx.translate(ball.vx, ball.vy)
+      requestAnimationFrameID = window.requestAnimationFrame(draw);
+    };
+
+
+    ctx.translate(ball.x, ball.y)
+    ball.draw();
+    triangle.draw();
+
+    document.onkeydown = checkKey1;
+    function checkKey1(e) {
+      console.log(e)
+      var code = e.keyCode;
+      if(code == 87){ //W (forward)d
+        vx = 0;
+        vy = -movementSpeed;
+        angularV = 0;
+      }
+      else if(code == 83){ //S (back)
+        vx = 0;
+        vy = movementSpeed ;
+        angularV = 0;
+      }
+      else if(code == 65){ //A (left)
+        vx = -movementSpeed;
+        vy = 0;
+        angularV = 0;
+      }
+      else if(code == 68){//D (right)
+        vx = movementSpeed;
+        vy = 0;
+        angularV = 0;
+      }
+      else if(code == 81){//Q (turn left) 
+        vx = 0;
+        vy = 0;
+        angularV = -angularvelocity;
+        moveLeft();
+      }
+      else if(code == 69){//E (turn right)
+        vx = 0;
+        vy = 0;
+        angularV = angularvelocity;
+        moveRight();
+      }
+     	draw(vx, vy, angularV);
+    }
+
+    document.onkeyup = checkKey2;
+    function checkKey2(e) {
+      
+      cancelAnimationFrame(requestAnimationFrameID);
+      if (e.keyCode === 81 || e.keyCode ===69)
+        moveStop();
+    }
+     
+     $('#btn-r').on('mousedown', function () {
+       console.log('mousedown:right');
+       moveRight();
+     });
+     
+     $('#btn-l').on('mousedown', function () {
+       console.log('mousedown:left');
+       moveLeft();
+     });
+     
+     $('#btn-s').on('mousedown', function () {
+       console.log('mousedown:stop');
+       moveStop();
+     });
+     
+     $('#btn-r, #btn-l').on('mouseup', function () {
+       console.log('mouseup:stop')
+       moveStop();
+     });
+     
+     $(document).keydown(function (e) {
+       // Left: 37, Right: 39, Down: 40, Top: 38
+       switch(e.keyCode) {
+         case 37:
+           moveLeft();
+           break;
+         case 38:
+           moveStop();
+           break;
+         case 39:
+           moveRight();
+           break;
+         case 40:
+           moveStop();
+           break;
+       }
+     });
+     
+     function moveStop() {
+       $.post('/stop', function (data) {
+         console.log(data);
+       });
+     }
+     
+     function moveLeft() {
+       $.post('/l', function (data) {
+         console.log(data);
+       });
+     }
+     
+     function moveRight() {
+       $.post('/r', function (data) {
+         console.log(data);
+       });
+     }

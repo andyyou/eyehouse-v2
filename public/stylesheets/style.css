@@ -1,0 +1,101 @@
+body {
+  height: 100%;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+.navbar.navbar-inverse {
+  border-radius: 0px;
+}
+
+.keys {
+  width: 200px;
+  height: 80px;
+  padding: 15px;
+  margin: 0 auto;
+  position: fixed;
+  text-align: center;
+  right: 0;
+  bottom: 0;
+}
+
+.keys .b {
+  display: inline-block;
+}
+
+#viewport {
+  width: 640px;
+  height: 480px;
+  background: black;
+}
+
+.housemap {
+  background: url(/images/house-map.jpg) no-repeat;
+  background-size: 100% auto; 
+}
+
+#map {
+  background: transparent;
+}
+
+
+
+.keys .arrow {
+  background: transparent;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 25px 43.3px 25px;
+  border-color: transparent transparent rgba(0, 0, 0, .2) transparent;
+}
+
+.keys .arrow:hover {
+  border-color: transparent transparent rgba(0, 255, 0, .7) transparent;
+}
+
+.keys .circle {
+  width: 45px;
+  height: 45px;
+  background: rgba(0, 0, 0, .2);
+}
+
+.keys .circle:hover {
+  background: rgba(255, 0, 0, .7);
+}
+
+#btn-l {
+  transform: rotate(-90deg);
+  float: left;
+}
+
+#btn-r {
+  transform: rotate(90deg);
+  float: right;
+}
+
+#btn-s {
+
+}
+
+.main {
+  position: relative;
+  margin: 0 auto;
+  width: 640px;
+  height: 480px;
+}
+
+#btn-save {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-radius: 0;
+}
+
+@media screen and (max-width: 600px) {
+  .keys {
+    left: 200px;;
+  }
+}

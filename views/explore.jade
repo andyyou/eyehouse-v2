@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  div.row
+    each house, index in houses
+      div.col-md-3 
+        div(class="thumbnail")
+          a(href="/house/#{index}")
+            img(src="#{house.cover}")
+          div(class="caption")
+            a(href="/house/#{index}")
+              h3 #{house.name}
+            p #{house.description}
