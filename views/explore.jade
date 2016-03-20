@@ -2,6 +2,16 @@ extends layout
 
 block content
   div.row
+    div.col-md-12
+      div(class="hero")
+        form(id="", method="", action="", class="form-inline searchbox")
+          div(class="form-group")
+            div(class="input-group")
+              input(type='text', placeholder='City, Location', class="form-control")
+              div(class="input-group-btn")
+                button(type="submit" class="btn btn-success") Search
+      hr
+  div.row
     each house, index in houses
       div.col-md-3 
         div(class="thumbnail")

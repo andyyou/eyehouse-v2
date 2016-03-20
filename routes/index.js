@@ -5,8 +5,13 @@ var House = require('../models/house');
 var router = express.Router();
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express', user: req.user });
+router.get('/', function (req, res) {
+  var houses = House.find(function (err, houses) {
+    if (err) return console.error(err);
+
+    res.render('explore', { title: 'Express', user: req.user, houses: houses})
+  });
+
 });
 
 router.get('/house/:id', function(req, res, next) {
