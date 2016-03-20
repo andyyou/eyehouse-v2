@@ -7,13 +7,8 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-var routes = require('./routes/index');
-var net = require('net');
 
-var socket = new net.Socket();
-socket.connect(9999, '172.16.1.204', function () {
-  console.log('9999 connected');
-});
+var routes = require('./routes/index');
 
 // var socket2 = new net.Socket();
 // socket2.connect(6666, '172.16.1.204', function () {

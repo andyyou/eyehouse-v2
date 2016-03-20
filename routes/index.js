@@ -3,6 +3,12 @@ var passport = require('passport');
 var Account = require('../models/account');
 var House = require('../models/house');
 var router = express.Router();
+var net = require('net');
+
+var socket = new net.Socket();
+socket.connect(9999, '172.16.1.204', function () {
+  console.log('9999 connected');
+});
 
 /* GET home page. */
 router.get('/', function (req, res) {
