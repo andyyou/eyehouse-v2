@@ -11,11 +11,11 @@ var routes = require('./routes/index');
 var net = require('net');
 
 var socket = new net.Socket();
-// socket.connect(9999, '172.16.1.204', function () {
-//   console.log('9999 connected');
-// });
+socket.connect(9999, '172.16.1.204', function () {
+  console.log('9999 connected');
+});
 
-var socket2 = new net.Socket();
+// var socket2 = new net.Socket();
 // socket2.connect(6666, '172.16.1.204', function () {
 //   console.log('6666 connected');
 // });
